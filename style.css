@@ -1,5 +1,5 @@
 /* =============================================
-   AppTrack – Job & Internship Tracker
+   AppTrack â€“ Job & Internship Tracker
    Design System & Component Styles
    ============================================= */
 
@@ -1017,11 +1017,498 @@ textarea { resize: vertical; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
 
 /* =============================================
+   COMPANY LOGOS & BADGES
+   ============================================= */
+.card-company-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.company-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  position: relative;
+}
+
+.company-badge.badge-sm {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+}
+
+.company-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.company-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.badge-sm .company-avatar-fallback {
+  font-size: 9px;
+}
+
+.table-company-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-company-name {
+  font-weight: 600;
+}
+
+.table-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.table-link:hover {
+  color: var(--accent-light);
+}
+
+.card-notes {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =============================================
+   FOLLOW-UP & DEADLINE ALERT BANNER
+   ============================================= */
+.alert-banner {
+  margin: 18px 28px 0;
+  padding: 12px 18px;
+  background: rgba(108, 99, 255, 0.12);
+  border: 1px solid rgba(108, 99, 255, 0.35);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  animation: bannerSlide 250ms ease-out;
+}
+
+.alert-banner.banner-warning {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+@keyframes bannerSlide {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.alert-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.alert-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.alert-text strong {
+  color: #fff;
+}
+
+.banner-sep {
+  color: var(--text-muted);
+  margin: 0 4px;
+}
+
+.alert-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.alert-action-btn {
+  padding: 6px 12px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.alert-action-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.alert-dismiss-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: all var(--transition);
+}
+
+.alert-dismiss-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* =============================================
+   SIDEBAR DATA ACTIONS & DROPDOWN
+   ============================================= */
+.sidebar-data-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dropdown-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  animation: dropdownFade 150ms ease-out;
+}
+
+.dropdown-menu.show {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition);
+  width: 100%;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+.dropdown-item svg {
+  color: var(--accent-light);
+}
+
+.import-preview-box {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.import-preview-icon {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.import-subtext {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.import-modal-footer {
+  display: flex;
+  gap: 10px;
+}
+
+.import-modal-footer .btn-secondary,
+.import-modal-footer .btn-primary {
+  flex: 1;
+  text-align: center;
+  justify-content: center;
+}
+
+/* =============================================
+   ANALYTICS & FUNNEL VIEW
+   ============================================= */
+.analytics-view {
+  padding: 24px 28px;
+  flex: 1;
+}
+
+.analytics-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1400px;
+}
+
+.analytics-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+}
+
+.funnel-card {
+  border-top: 2px solid var(--accent);
+}
+
+.analytics-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  gap: 12px;
+}
+
+.analytics-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: var(--text-primary);
+}
+
+.analytics-card-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.analytics-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--accent-glow);
+  color: var(--accent-light);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.funnel-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.funnel-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.funnel-label-col {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+}
+
+.funnel-step-name {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.funnel-step-count {
+  color: var(--text-secondary);
+}
+
+.funnel-track {
+  height: 10px;
+  background: var(--bg-card);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.funnel-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.chart-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.velocity-svg {
+  width: 100%;
+  height: 150px;
+  display: block;
+}
+
+.chart-bar {
+  transition: opacity 150ms ease;
+}
+
+.chart-bar:hover {
+  opacity: 0.85;
+}
+
+.distribution-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dist-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dist-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+}
+
+.dist-count {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.dist-track {
+  height: 7px;
+  background: var(--bg-card);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.dist-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #a855f7);
+  border-radius: 999px;
+  transition: width 600ms ease;
+}
+
+.status-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.insight-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.insight-num {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+}
+
+.insight-num.green { color: var(--offer); }
+.insight-num.accent { color: var(--accent-light); }
+.insight-num.amber { color: var(--interview); }
+
+.insight-label {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.analytics-empty {
+  text-align: center;
+  padding: 30px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* =============================================
    RESPONSIVE
    ============================================= */
 @media (max-width: 1200px) {
   .stats-bar { grid-template-columns: repeat(2, 1fr); }
   .kanban-board { grid-template-columns: repeat(2, 1fr); }
+  .analytics-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 900px) {
@@ -1035,15 +1522,19 @@ textarea { resize: vertical; }
   .main-content { margin-left: 0; }
   .sidebar-toggle { display: flex; }
   .search-box input { width: 150px; }
+  .alert-banner { margin: 14px 16px 0; }
+  .analytics-view { padding: 16px; }
 }
 
 @media (max-width: 600px) {
   .stats-bar { grid-template-columns: 1fr 1fr; padding: 16px; }
   .kanban-board { grid-template-columns: 1fr; }
   .top-header { padding: 14px 16px; gap: 10px; }
-  .kanban-view, .table-view { padding: 16px; }
+  .kanban-view, .table-view, .analytics-view { padding: 16px; }
   .add-btn span { display: none; }
   .form-grid { grid-template-columns: 1fr; }
   .modal { max-width: 100%; }
   .search-box { display: none; }
+  .insights-grid { grid-template-columns: 1fr; }
+  .alert-banner { flex-direction: column; align-items: flex-start; gap: 10px; }
 }
