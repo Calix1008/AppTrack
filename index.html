@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AppTrack – Internship & Job Application Tracker</title>
+  <meta name="description" content="Track all your internship and job applications in one place. Kanban board with status tracking, stats, and follow-up reminders." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      </div>
+      <span class="logo-text">AppTrack</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" id="nav-kanban" onclick="switchView('kanban')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span>Kanban Board</span>
+      </button>
+      <button class="nav-item" id="nav-table" onclick="switchView('table')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/></svg>
+        <span>Table View</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section-title">Filters</div>
+    <div class="sidebar-filters" id="sidebar-filters">
+      <label class="filter-check active" data-status="all">
+        <input type="radio" name="filter" value="all" checked />
+        <span class="filter-dot all-dot"></span>
+        <span>All Applications</span>
+      </label>
+      <label class="filter-check" data-status="applied">
+        <input type="radio" name="filter" value="applied" />
+        <span class="filter-dot applied-dot"></span>
+        <span>Applied</span>
+      </label>
+      <label class="filter-check" data-status="interview">
+        <input type="radio" name="filter" value="interview" />
+        <span class="filter-dot interview-dot"></span>
+        <span>Interviewing</span>
+      </label>
+      <label class="filter-check" data-status="offer">
+        <input type="radio" name="filter" value="offer" />
+        <span class="filter-dot offer-dot"></span>
+        <span>Offers</span>
+      </label>
+      <label class="filter-check" data-status="rejected">
+        <input type="radio" name="filter" value="rejected" />
+        <span class="filter-dot rejected-dot"></span>
+        <span>Rejected</span>
+      </label>
+    </div>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-title">Quick Stats</div>
+    <div class="sidebar-mini-stats">
+      <div class="mini-stat">
+        <span class="mini-stat-label">Total</span>
+        <span class="mini-stat-value" id="stat-total">0</span>
+      </div>
+      <div class="mini-stat">
+        <span class="mini-stat-label">Response Rate</span>
+        <span class="mini-stat-value accent" id="stat-response">0%</span>
+      </div>
+      <div class="mini-stat">
+        <span class="mini-stat-label">Offer Rate</span>
+        <span class="mini-stat-value green" id="stat-offer-rate">0%</span>
+      </div>
+    </div>
+
+    <div class="sidebar-bottom">
+      <button class="import-btn" onclick="exportData()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export JSON
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content" id="main-content">
+
+    <!-- Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="header-title">
+          <h1 id="view-title">Kanban Board</h1>
+          <p class="header-subtitle" id="view-subtitle">Drag cards between columns to update status</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="search-input" placeholder="Search company or role…" oninput="handleSearch()" />
+        </div>
+        <button class="add-btn" id="add-application-btn" onclick="openModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Application
+        </button>
+      </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar" id="stats-bar">
+      <div class="stat-card" id="sc-total">
+        <div class="stat-icon total-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number" id="stat-card-total">0</div>
+          <div class="stat-label">Total Applied</div>
+        </div>
+        <div class="stat-trend" id="trend-total"></div>
+      </div>
+      <div class="stat-card" id="sc-interview">
+        <div class="stat-icon interview-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number" id="stat-card-interview">0</div>
+          <div class="stat-label">Interviewing</div>
+        </div>
+      </div>
+      <div class="stat-card" id="sc-offer">
+        <div class="stat-icon offer-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number" id="stat-card-offer">0</div>
+          <div class="stat-label">Offers Received</div>
+        </div>
+      </div>
+      <div class="stat-card" id="sc-response">
+        <div class="stat-icon response-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number" id="stat-card-response">0%</div>
+          <div class="stat-label">Response Rate</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kanban Board -->
+    <section class="kanban-view" id="kanban-view">
+      <div class="kanban-board" id="kanban-board">
+        <div class="kanban-column" id="col-applied" data-status="applied">
+          <div class="column-header">
+            <div class="col-title-row">
+              <div class="col-dot applied-dot"></div>
+              <span class="col-title">Applied</span>
+              <span class="col-count" id="count-applied">0</span>
+            </div>
+          </div>
+          <div class="column-body" id="cards-applied" ondragover="allowDrop(event)" ondrop="dropCard(event,'applied')">
+            <div class="empty-col-hint" id="empty-applied">Drop cards here</div>
+          </div>
+          <button class="col-add-btn" onclick="openModal('applied')">+ Add Card</button>
+        </div>
+
+        <div class="kanban-column" id="col-interview" data-status="interview">
+          <div class="column-header">
+            <div class="col-title-row">
+              <div class="col-dot interview-dot"></div>
+              <span class="col-title">Interviewing</span>
+              <span class="col-count" id="count-interview">0</span>
+            </div>
+          </div>
+          <div class="column-body" id="cards-interview" ondragover="allowDrop(event)" ondrop="dropCard(event,'interview')">
+            <div class="empty-col-hint" id="empty-interview">Drop cards here</div>
+          </div>
+          <button class="col-add-btn" onclick="openModal('interview')">+ Add Card</button>
+        </div>
+
+        <div class="kanban-column" id="col-offer" data-status="offer">
+          <div class="column-header">
+            <div class="col-title-row">
+              <div class="col-dot offer-dot"></div>
+              <span class="col-title">Offer</span>
+              <span class="col-count" id="count-offer">0</span>
+            </div>
+          </div>
+          <div class="column-body" id="cards-offer" ondragover="allowDrop(event)" ondrop="dropCard(event,'offer')">
+            <div class="empty-col-hint" id="empty-offer">Drop cards here</div>
+          </div>
+          <button class="col-add-btn" onclick="openModal('offer')">+ Add Card</button>
+        </div>
+
+        <div class="kanban-column" id="col-rejected" data-status="rejected">
+          <div class="column-header">
+            <div class="col-title-row">
+              <div class="col-dot rejected-dot"></div>
+              <span class="col-title">Rejected</span>
+              <span class="col-count" id="count-rejected">0</span>
+            </div>
+          </div>
+          <div class="column-body" id="cards-rejected" ondragover="allowDrop(event)" ondrop="dropCard(event,'rejected')">
+            <div class="empty-col-hint" id="empty-rejected">Drop cards here</div>
+          </div>
+          <button class="col-add-btn" onclick="openModal('rejected')">+ Add Card</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Table View -->
+    <section class="table-view" id="table-view" style="display:none;">
+      <div class="table-container">
+        <table class="app-table" id="app-table">
+          <thead>
+            <tr>
+              <th class="sortable" onclick="sortTable('company')">Company <span class="sort-icon">↕</span></th>
+              <th class="sortable" onclick="sortTable('role')">Role <span class="sort-icon">↕</span></th>
+              <th class="sortable" onclick="sortTable('dateApplied')">Date Applied <span class="sort-icon">↕</span></th>
+              <th>Status</th>
+              <th>Type</th>
+              <th class="sortable" onclick="sortTable('followUp')">Follow-up <span class="sort-icon">↕</span></th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+        <div class="table-empty" id="table-empty" style="display:none;">
+          <div class="empty-icon">📋</div>
+          <p>No applications yet. Click "Add Application" to get started!</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h2 id="modal-title">Add Application</h2>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="app-form" onsubmit="saveApplication(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="field-company">Company Name *</label>
+            <input type="text" id="field-company" placeholder="e.g. Google" required autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label for="field-role">Role / Position *</label>
+            <input type="text" id="field-role" placeholder="e.g. Software Engineer Intern" required autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label for="field-type">Application Type</label>
+            <select id="field-type">
+              <option value="internship">Internship</option>
+              <option value="full-time">Full-time</option>
+              <option value="part-time">Part-time</option>
+              <option value="contract">Contract</option>
+              <option value="co-op">Co-op</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="field-status">Status *</label>
+            <select id="field-status" required>
+              <option value="applied">Applied</option>
+              <option value="interview">Interviewing</option>
+              <option value="offer">Offer</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="field-date">Date Applied *</label>
+            <input type="date" id="field-date" required />
+          </div>
+          <div class="form-group">
+            <label for="field-followup">Follow-up Date</label>
+            <input type="date" id="field-followup" />
+          </div>
+          <div class="form-group">
+            <label for="field-location">Location</label>
+            <input type="text" id="field-location" placeholder="e.g. Remote, New York, NY" autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label for="field-salary">Salary / Stipend</label>
+            <input type="text" id="field-salary" placeholder="e.g. $30/hr or $75k" autocomplete="off" />
+          </div>
+          <div class="form-group full-width">
+            <label for="field-link">Job Posting URL</label>
+            <input type="url" id="field-link" placeholder="https://..." autocomplete="off" />
+          </div>
+          <div class="form-group full-width">
+            <label for="field-notes">Notes</label>
+            <textarea id="field-notes" rows="3" placeholder="Referral contact, interview rounds, key skills…"></textarea>
+          </div>
+        </div>
+        <input type="hidden" id="field-id" />
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn-primary" id="submit-btn">Add Application</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" id="delete-overlay" onclick="closeDeleteModal(event)">
+    <div class="modal modal-sm" id="delete-modal" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h2>Delete Application</h2>
+        <button class="modal-close" onclick="closeDeleteModal()" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="delete-icon">🗑️</div>
+        <p>Are you sure you want to delete <strong id="delete-company-name"></strong>?</p>
+        <p class="delete-sub">This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn-danger" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
