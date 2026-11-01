@@ -1218,52 +1218,21 @@ textarea { resize: vertical; }
 .sidebar-data-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
-}
-
-.header-export-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text-primary);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all var(--transition);
-}
-
-.header-export-btn:hover {
-  background: var(--bg-elevated);
-  border-color: var(--border-hover);
-  color: var(--accent-light);
+  gap: 8px;
 }
 
 .dropdown-wrapper {
   position: relative;
-}
-
-.sidebar-data-actions .dropdown-wrapper {
   width: 100%;
-}
-
-.header-dropdown-menu {
-  top: calc(100% + 6px);
-  bottom: auto;
-  min-width: 160px;
-  right: 0;
-  left: auto;
 }
 
 .dropdown-menu {
   display: none;
   position: absolute;
-  bottom: calc(100% + 6px);
+  bottom: calc(100% + 8px);
   left: 0;
   right: 0;
+  min-width: 140px;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -1274,7 +1243,7 @@ textarea { resize: vertical; }
 }
 
 .dropdown-menu.show {
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   gap: 2px;
 }

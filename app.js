@@ -888,26 +888,15 @@ function toggleExportMenu(e) {
   if (dropdown) dropdown.classList.toggle('show');
 }
 
-function toggleHeaderExportMenu(e) {
-  if (e) e.stopPropagation();
-  const dropdown = document.getElementById('header-export-dropdown');
-  if (dropdown) dropdown.classList.toggle('show');
-}
-
 document.addEventListener('click', e => {
-  const dropdown1 = document.getElementById('export-dropdown');
-  const dropdown2 = document.getElementById('header-export-dropdown');
-  if (dropdown1 && !e.target.closest('.sidebar-bottom .dropdown-wrapper')) {
-    dropdown1.classList.remove('show');
-  }
-  if (dropdown2 && !e.target.closest('.header-right .dropdown-wrapper')) {
-    dropdown2.classList.remove('show');
+  const dropdown = document.getElementById('export-dropdown');
+  if (dropdown && !e.target.closest('.dropdown-wrapper')) {
+    dropdown.classList.remove('show');
   }
 });
 
 function exportData(format = 'json') {
   document.getElementById('export-dropdown')?.classList.remove('show');
-  document.getElementById('header-export-dropdown')?.classList.remove('show');
 
   const today = new Date().toISOString().split('T')[0];
 
