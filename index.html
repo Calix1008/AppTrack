@@ -3,341 +3,748 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AppTrack – Internship & Job Application Tracker</title>
-  <meta name="description" content="Track all your internship and job applications in one place. Kanban board with status tracking, stats, and follow-up reminders." />
+  <title>AppTrack – Never Lose Track of an Application Again</title>
+  <meta name="description" content="AppTrack helps students manage internship and job applications with a Kanban board, live stats, and follow-up reminders — all in the browser, no sign-up needed." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Tokens ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0e13;
+      --surface: #13151e;
+      --card: #1a1d29;
+      --border: rgba(255,255,255,0.07);
+      --accent: #6c63ff;
+      --accent2: #a855f7;
+      --accent-light: #8b84ff;
+      --glow: rgba(108,99,255,0.18);
+      --applied: #3b8beb;
+      --interview: #f59e0b;
+      --offer: #10b981;
+      --rejected: #ef4444;
+      --text: #e8eaf0;
+      --muted: #8b90a8;
+      --dimmed: #555a72;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Animated background grid ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(108,99,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(108,99,255,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Orb glows ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      animation: float 8s ease-in-out infinite alternate;
+    }
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(108,99,255,0.12), transparent 70%);
+      top: -150px; left: -100px;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(168,85,247,0.1), transparent 70%);
+      bottom: -100px; right: -80px;
+      animation-delay: -4s;
+    }
+    .orb-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(16,185,129,0.07), transparent 70%);
+      top: 40%; left: 60%;
+      animation-delay: -2s;
+    }
+
+    @keyframes float {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(30px, 20px) scale(1.05); }
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(13,14,19,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-size: 17px; font-weight: 800; letter-spacing: -0.4px;
+      background: linear-gradient(135deg, #e8eaf0, var(--accent-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-cta {
+      padding: 9px 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 9px;
+      color: white; font-size: 13.5px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: all 200ms ease;
+      box-shadow: 0 4px 14px rgba(108,99,255,0.35);
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(108,99,255,0.5);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center;
+      padding: 160px 24px 100px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 6px 14px;
+      background: rgba(108,99,255,0.12);
+      border: 1px solid rgba(108,99,255,0.25);
+      border-radius: 999px;
+      font-size: 12.5px; font-weight: 500; color: var(--accent-light);
+      margin-bottom: 28px;
+      animation: fadeUp 600ms ease both;
+    }
+
+    .badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--offer);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 1.08;
+      margin-bottom: 24px;
+      animation: fadeUp 600ms 100ms ease both;
+    }
+
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, var(--accent-light), var(--accent2), #ec4899);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(15px, 2vw, 18px);
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 40px;
+      font-weight: 400;
+      animation: fadeUp 600ms 200ms ease both;
+    }
+
+    .hero-sub strong { color: var(--text); font-weight: 600; }
+
+    .hero-actions {
+      display: flex; gap: 14px; align-items: center; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 600ms 300ms ease both;
+    }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 12px;
+      color: white; font-size: 15px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 6px 24px rgba(108,99,255,0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 32px rgba(108,99,255,0.55);
+    }
+
+    .btn-primary svg { transition: transform 250ms ease; }
+    .btn-primary:hover svg { transform: translateX(4px); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 24px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--muted); font-size: 15px; font-weight: 500;
+      cursor: pointer; text-decoration: none;
+      transition: all 200ms ease;
+    }
+
+    .btn-ghost:hover {
+      color: var(--text);
+      border-color: rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.07);
+    }
+
+    /* ── Mock board preview ── */
+    .preview-wrap {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 1000px;
+      margin: 0 auto 100px;
+      padding: 0 24px;
+      animation: fadeUp 700ms 450ms ease both;
+    }
+
+    .preview-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%; height: 60%;
+      background: radial-gradient(ellipse, rgba(108,99,255,0.15), transparent 70%);
+      pointer-events: none;
+    }
+
+    .preview-board {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
+    }
+
+    .preview-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .preview-dots { display: flex; gap: 7px; }
+    .preview-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .d1 { background: #ef4444; } .d2 { background: #f59e0b; } .d3 { background: #10b981; }
+
+    .preview-title {
+      font-size: 12.5px; font-weight: 600; color: var(--muted);
+      display: flex; align-items: center; gap: 7px;
+    }
+
+    .preview-body {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+
+    .preview-col {
+      padding: 14px 12px;
+      border-right: 1px solid var(--border);
+      min-height: 280px;
+    }
+    .preview-col:last-child { border-right: none; }
+
+    .preview-col-head {
+      display: flex; align-items: center; gap: 7px;
+      margin-bottom: 12px;
+    }
+    .preview-col-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .preview-col-label { font-size: 11px; font-weight: 600; color: var(--muted); flex: 1; }
+    .preview-col-count {
+      font-size: 10px; font-weight: 700;
+      padding: 1px 6px; border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      color: var(--dimmed);
+    }
+
+    .preview-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 11px;
+      margin-bottom: 8px;
+      transition: transform 200ms ease;
+    }
+    .preview-card:hover { transform: translateY(-2px); }
+
+    .pc-company { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+    .pc-role { font-size: 10.5px; color: var(--muted); margin-bottom: 7px; }
+    .pc-tag {
+      display: inline-block; font-size: 10px; font-weight: 500;
+      padding: 2px 7px; border-radius: 999px; margin-top: 4px;
+    }
+    .pc-tag.intern { background: rgba(108,99,255,0.15); color: var(--accent-light); }
+    .pc-tag.ft { background: rgba(16,185,129,0.12); color: var(--offer); }
+
+    /* ── Features ── */
+    .section {
+      position: relative; z-index: 1;
+      max-width: 1060px; margin: 0 auto;
+      padding: 0 24px 100px;
+    }
+
+    .section-label {
+      text-align: center;
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 2px;
+      color: var(--accent-light);
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(26px, 3.5vw, 38px);
+      font-weight: 800; letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .section-sub {
+      text-align: center;
+      font-size: 15px; color: var(--muted);
+      max-width: 480px; margin: 0 auto 56px;
+      line-height: 1.7;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 200ms ease;
+      position: relative; overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      opacity: 0;
+      transition: opacity 200ms ease;
+      border-radius: inherit;
+    }
+
+    .feature-card:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-3px); }
+    .feature-card:hover::before { opacity: 1; }
+
+    .fc-1::before { background: radial-gradient(circle at top left, rgba(108,99,255,0.08), transparent 60%); }
+    .fc-2::before { background: radial-gradient(circle at top left, rgba(245,158,11,0.07), transparent 60%); }
+    .fc-3::before { background: radial-gradient(circle at top left, rgba(16,185,129,0.07), transparent 60%); }
+    .fc-4::before { background: radial-gradient(circle at top left, rgba(59,139,235,0.07), transparent 60%); }
+    .fc-5::before { background: radial-gradient(circle at top left, rgba(168,85,247,0.07), transparent 60%); }
+    .fc-6::before { background: radial-gradient(circle at top left, rgba(236,72,153,0.07), transparent 60%); }
+
+    .feature-icon {
+      width: 42px; height: 42px; border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px; font-size: 20px;
+    }
+
+    .fi-1 { background: rgba(108,99,255,0.15); }
+    .fi-2 { background: rgba(245,158,11,0.12); }
+    .fi-3 { background: rgba(16,185,129,0.12); }
+    .fi-4 { background: rgba(59,139,235,0.12); }
+    .fi-5 { background: rgba(168,85,247,0.12); }
+    .fi-6 { background: rgba(236,72,153,0.12); }
+
+    .feature-title {
+      font-size: 14.5px; font-weight: 700; margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px; color: var(--muted); line-height: 1.65;
+    }
+
+    /* ── Stats row ── */
+    .stats-row {
+      position: relative; z-index: 1;
+      display: flex; justify-content: center; gap: 0;
+      max-width: 700px; margin: 0 auto 100px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .stat-item {
+      flex: 1; text-align: center;
+      padding: 28px 20px;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-num {
+      font-size: 32px; font-weight: 900; letter-spacing: -1.5px;
+      background: linear-gradient(135deg, var(--accent-light), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+    }
+
+    .stat-lbl { font-size: 12px; color: var(--muted); font-weight: 500; }
+
+    /* ── CTA banner ── */
+    .cta-section {
+      position: relative; z-index: 1;
+      max-width: 1060px; margin: 0 auto 80px;
+      padding: 0 24px;
+    }
+
+    .cta-card {
+      background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(168,85,247,0.1));
+      border: 1px solid rgba(108,99,255,0.25);
+      border-radius: 20px;
+      padding: 60px 40px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+
+    .cta-card::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 300px; height: 300px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(168,85,247,0.12), transparent 70%);
+    }
+
+    .cta-card::after {
+      content: '';
+      position: absolute; bottom: -60px; left: -60px;
+      width: 250px; height: 250px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(108,99,255,0.12), transparent 70%);
+    }
+
+    .cta-card h2 {
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 800; letter-spacing: -1px;
+      margin-bottom: 12px; position: relative; z-index: 1;
+    }
+
+    .cta-card p {
+      font-size: 15px; color: var(--muted);
+      margin-bottom: 32px; position: relative; z-index: 1;
+    }
+
+    .cta-actions {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+      position: relative; z-index: 1;
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: relative; z-index: 1;
+      text-align: center; padding: 28px;
+      border-top: 1px solid var(--border);
+      color: var(--dimmed); font-size: 12.5px;
+    }
+
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Scroll-reveal: elements start invisible */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 600ms ease, transform 600ms ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .preview-body { grid-template-columns: repeat(2, 1fr); }
+      .preview-col:nth-child(3), .preview-col:nth-child(4) { display: none; }
+      .stats-row { flex-direction: column; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat-item:last-child { border-bottom: none; }
+    }
+
+    @media (max-width: 520px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .hero { padding: 120px 20px 80px; }
+      .cta-card { padding: 40px 24px; }
+    }
+  </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+
+  <!-- Background orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Nav -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
       </div>
-      <span class="logo-text">AppTrack</span>
+      <span class="nav-logo-text">AppTrack</span>
+    </a>
+    <a href="app.html" class="nav-cta">Open Tracker →</a>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Free · No sign-up · Works offline
     </div>
 
-    <nav class="sidebar-nav">
-      <button class="nav-item active" id="nav-kanban" onclick="switchView('kanban')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        <span>Kanban Board</span>
-      </button>
-      <button class="nav-item" id="nav-table" onclick="switchView('table')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/></svg>
-        <span>Table View</span>
-      </button>
-    </nav>
+    <h1>
+      Stop losing track of<br/>
+      <span class="gradient-text">your applications</span>
+    </h1>
 
-    <div class="sidebar-divider"></div>
+    <p class="hero-sub">
+      AppTrack is a <strong>Kanban-style board</strong> built for students juggling
+      dozens of internship and job applications — so you never miss a follow-up
+      or forget where you stand.
+    </p>
 
-    <div class="sidebar-section-title">Filters</div>
-    <div class="sidebar-filters" id="sidebar-filters">
-      <label class="filter-check active" data-status="all">
-        <input type="radio" name="filter" value="all" checked />
-        <span class="filter-dot all-dot"></span>
-        <span>All Applications</span>
-      </label>
-      <label class="filter-check" data-status="applied">
-        <input type="radio" name="filter" value="applied" />
-        <span class="filter-dot applied-dot"></span>
-        <span>Applied</span>
-      </label>
-      <label class="filter-check" data-status="interview">
-        <input type="radio" name="filter" value="interview" />
-        <span class="filter-dot interview-dot"></span>
-        <span>Interviewing</span>
-      </label>
-      <label class="filter-check" data-status="offer">
-        <input type="radio" name="filter" value="offer" />
-        <span class="filter-dot offer-dot"></span>
-        <span>Offers</span>
-      </label>
-      <label class="filter-check" data-status="rejected">
-        <input type="radio" name="filter" value="rejected" />
-        <span class="filter-dot rejected-dot"></span>
-        <span>Rejected</span>
-      </label>
+    <div class="hero-actions">
+      <a href="app.html" class="btn-primary" id="get-started-btn">
+        Start Tracking for Free
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a href="#features" class="btn-ghost">
+        See features
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </a>
     </div>
+  </section>
 
-    <div class="sidebar-divider"></div>
-    <div class="sidebar-section-title">Quick Stats</div>
-    <div class="sidebar-mini-stats">
-      <div class="mini-stat">
-        <span class="mini-stat-label">Total</span>
-        <span class="mini-stat-value" id="stat-total">0</span>
+  <!-- Board Preview -->
+  <div class="preview-wrap">
+    <div class="preview-glow"></div>
+    <div class="preview-board">
+      <div class="preview-header">
+        <div class="preview-dots">
+          <div class="preview-dot d1"></div>
+          <div class="preview-dot d2"></div>
+          <div class="preview-dot d3"></div>
+        </div>
+        <div class="preview-title">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          AppTrack — Kanban Board
+        </div>
+        <div style="width:80px"></div>
       </div>
-      <div class="mini-stat">
-        <span class="mini-stat-label">Response Rate</span>
-        <span class="mini-stat-value accent" id="stat-response">0%</span>
-      </div>
-      <div class="mini-stat">
-        <span class="mini-stat-label">Offer Rate</span>
-        <span class="mini-stat-value green" id="stat-offer-rate">0%</span>
-      </div>
-    </div>
-
-    <div class="sidebar-bottom">
-      <button class="import-btn" onclick="exportData()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Export JSON
-      </button>
-    </div>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="main-content" id="main-content">
-
-    <!-- Header -->
-    <header class="top-header">
-      <div class="header-left">
-        <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
-        <div class="header-title">
-          <h1 id="view-title">Kanban Board</h1>
-          <p class="header-subtitle" id="view-subtitle">Drag cards between columns to update status</p>
-        </div>
-      </div>
-      <div class="header-right">
-        <div class="search-box">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="search-input" placeholder="Search company or role…" oninput="handleSearch()" />
-        </div>
-        <button class="add-btn" id="add-application-btn" onclick="openModal()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Add Application
-        </button>
-      </div>
-    </header>
-
-    <!-- Stats Bar -->
-    <section class="stats-bar" id="stats-bar">
-      <div class="stat-card" id="sc-total">
-        <div class="stat-icon total-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-        </div>
-        <div class="stat-info">
-          <div class="stat-number" id="stat-card-total">0</div>
-          <div class="stat-label">Total Applied</div>
-        </div>
-        <div class="stat-trend" id="trend-total"></div>
-      </div>
-      <div class="stat-card" id="sc-interview">
-        <div class="stat-icon interview-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <div class="stat-info">
-          <div class="stat-number" id="stat-card-interview">0</div>
-          <div class="stat-label">Interviewing</div>
-        </div>
-      </div>
-      <div class="stat-card" id="sc-offer">
-        <div class="stat-icon offer-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <div class="stat-info">
-          <div class="stat-number" id="stat-card-offer">0</div>
-          <div class="stat-label">Offers Received</div>
-        </div>
-      </div>
-      <div class="stat-card" id="sc-response">
-        <div class="stat-icon response-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        </div>
-        <div class="stat-info">
-          <div class="stat-number" id="stat-card-response">0%</div>
-          <div class="stat-label">Response Rate</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Kanban Board -->
-    <section class="kanban-view" id="kanban-view">
-      <div class="kanban-board" id="kanban-board">
-        <div class="kanban-column" id="col-applied" data-status="applied">
-          <div class="column-header">
-            <div class="col-title-row">
-              <div class="col-dot applied-dot"></div>
-              <span class="col-title">Applied</span>
-              <span class="col-count" id="count-applied">0</span>
-            </div>
+      <div class="preview-body">
+        <!-- Applied -->
+        <div class="preview-col">
+          <div class="preview-col-head">
+            <div class="preview-col-dot" style="background:#3b8beb"></div>
+            <span class="preview-col-label">Applied</span>
+            <span class="preview-col-count">3</span>
           </div>
-          <div class="column-body" id="cards-applied" ondragover="allowDrop(event)" ondrop="dropCard(event,'applied')">
-            <div class="empty-col-hint" id="empty-applied">Drop cards here</div>
+          <div class="preview-card">
+            <div class="pc-company">Meta</div>
+            <div class="pc-role">Product Design Intern</div>
+            <span class="pc-tag intern">Internship</span>
           </div>
-          <button class="col-add-btn" onclick="openModal('applied')">+ Add Card</button>
-        </div>
-
-        <div class="kanban-column" id="col-interview" data-status="interview">
-          <div class="column-header">
-            <div class="col-title-row">
-              <div class="col-dot interview-dot"></div>
-              <span class="col-title">Interviewing</span>
-              <span class="col-count" id="count-interview">0</span>
-            </div>
+          <div class="preview-card">
+            <div class="pc-company">Figma</div>
+            <div class="pc-role">Design Engineering Intern</div>
+            <span class="pc-tag intern">Internship</span>
           </div>
-          <div class="column-body" id="cards-interview" ondragover="allowDrop(event)" ondrop="dropCard(event,'interview')">
-            <div class="empty-col-hint" id="empty-interview">Drop cards here</div>
-          </div>
-          <button class="col-add-btn" onclick="openModal('interview')">+ Add Card</button>
-        </div>
-
-        <div class="kanban-column" id="col-offer" data-status="offer">
-          <div class="column-header">
-            <div class="col-title-row">
-              <div class="col-dot offer-dot"></div>
-              <span class="col-title">Offer</span>
-              <span class="col-count" id="count-offer">0</span>
-            </div>
-          </div>
-          <div class="column-body" id="cards-offer" ondragover="allowDrop(event)" ondrop="dropCard(event,'offer')">
-            <div class="empty-col-hint" id="empty-offer">Drop cards here</div>
-          </div>
-          <button class="col-add-btn" onclick="openModal('offer')">+ Add Card</button>
-        </div>
-
-        <div class="kanban-column" id="col-rejected" data-status="rejected">
-          <div class="column-header">
-            <div class="col-title-row">
-              <div class="col-dot rejected-dot"></div>
-              <span class="col-title">Rejected</span>
-              <span class="col-count" id="count-rejected">0</span>
-            </div>
-          </div>
-          <div class="column-body" id="cards-rejected" ondragover="allowDrop(event)" ondrop="dropCard(event,'rejected')">
-            <div class="empty-col-hint" id="empty-rejected">Drop cards here</div>
-          </div>
-          <button class="col-add-btn" onclick="openModal('rejected')">+ Add Card</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Table View -->
-    <section class="table-view" id="table-view" style="display:none;">
-      <div class="table-container">
-        <table class="app-table" id="app-table">
-          <thead>
-            <tr>
-              <th class="sortable" onclick="sortTable('company')">Company <span class="sort-icon">↕</span></th>
-              <th class="sortable" onclick="sortTable('role')">Role <span class="sort-icon">↕</span></th>
-              <th class="sortable" onclick="sortTable('dateApplied')">Date Applied <span class="sort-icon">↕</span></th>
-              <th>Status</th>
-              <th>Type</th>
-              <th class="sortable" onclick="sortTable('followUp')">Follow-up <span class="sort-icon">↕</span></th>
-              <th>Notes</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="table-body"></tbody>
-        </table>
-        <div class="table-empty" id="table-empty" style="display:none;">
-          <div class="empty-icon">📋</div>
-          <p>No applications yet. Click "Add Application" to get started!</p>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Modal -->
-  <div class="modal-overlay" id="modal-overlay" onclick="closeModalOnOverlay(event)">
-    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <div class="modal-header">
-        <h2 id="modal-title">Add Application</h2>
-        <button class="modal-close" onclick="closeModal()" aria-label="Close modal">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <form id="app-form" onsubmit="saveApplication(event)">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="field-company">Company Name *</label>
-            <input type="text" id="field-company" placeholder="e.g. Google" required autocomplete="off" />
-          </div>
-          <div class="form-group">
-            <label for="field-role">Role / Position *</label>
-            <input type="text" id="field-role" placeholder="e.g. Software Engineer Intern" required autocomplete="off" />
-          </div>
-          <div class="form-group">
-            <label for="field-type">Application Type</label>
-            <select id="field-type">
-              <option value="internship">Internship</option>
-              <option value="full-time">Full-time</option>
-              <option value="part-time">Part-time</option>
-              <option value="contract">Contract</option>
-              <option value="co-op">Co-op</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="field-status">Status *</label>
-            <select id="field-status" required>
-              <option value="applied">Applied</option>
-              <option value="interview">Interviewing</option>
-              <option value="offer">Offer</option>
-              <option value="rejected">Rejected</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="field-date">Date Applied *</label>
-            <input type="date" id="field-date" required />
-          </div>
-          <div class="form-group">
-            <label for="field-followup">Follow-up Date</label>
-            <input type="date" id="field-followup" />
-          </div>
-          <div class="form-group">
-            <label for="field-location">Location</label>
-            <input type="text" id="field-location" placeholder="e.g. Remote, New York, NY" autocomplete="off" />
-          </div>
-          <div class="form-group">
-            <label for="field-salary">Salary / Stipend</label>
-            <input type="text" id="field-salary" placeholder="e.g. $30/hr or $75k" autocomplete="off" />
-          </div>
-          <div class="form-group full-width">
-            <label for="field-link">Job Posting URL</label>
-            <input type="url" id="field-link" placeholder="https://..." autocomplete="off" />
-          </div>
-          <div class="form-group full-width">
-            <label for="field-notes">Notes</label>
-            <textarea id="field-notes" rows="3" placeholder="Referral contact, interview rounds, key skills…"></textarea>
+          <div class="preview-card">
+            <div class="pc-company">Vercel</div>
+            <div class="pc-role">Frontend Engineer</div>
+            <span class="pc-tag ft">Full-time</span>
           </div>
         </div>
-        <input type="hidden" id="field-id" />
-        <div class="modal-footer">
-          <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
-          <button type="submit" class="btn-primary" id="submit-btn">Add Application</button>
+        <!-- Interviewing -->
+        <div class="preview-col">
+          <div class="preview-col-head">
+            <div class="preview-col-dot" style="background:#f59e0b"></div>
+            <span class="preview-col-label">Interviewing</span>
+            <span class="preview-col-count">1</span>
+          </div>
+          <div class="preview-card">
+            <div class="pc-company">Google</div>
+            <div class="pc-role">Software Engineer Intern</div>
+            <span class="pc-tag intern">Internship</span>
+          </div>
         </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Delete Confirmation Modal -->
-  <div class="modal-overlay" id="delete-overlay" onclick="closeDeleteModal(event)">
-    <div class="modal modal-sm" id="delete-modal" role="dialog" aria-modal="true">
-      <div class="modal-header">
-        <h2>Delete Application</h2>
-        <button class="modal-close" onclick="closeDeleteModal()" aria-label="Close">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="delete-icon">🗑️</div>
-        <p>Are you sure you want to delete <strong id="delete-company-name"></strong>?</p>
-        <p class="delete-sub">This action cannot be undone.</p>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
-        <button class="btn-danger" onclick="confirmDelete()">Delete</button>
+        <!-- Offer -->
+        <div class="preview-col">
+          <div class="preview-col-head">
+            <div class="preview-col-dot" style="background:#10b981"></div>
+            <span class="preview-col-label">Offer</span>
+            <span class="preview-col-count">1</span>
+          </div>
+          <div class="preview-card">
+            <div class="pc-company">Stripe</div>
+            <div class="pc-role">Backend Engineer Intern</div>
+            <span class="pc-tag intern">Internship</span>
+          </div>
+        </div>
+        <!-- Rejected -->
+        <div class="preview-col">
+          <div class="preview-col-head">
+            <div class="preview-col-dot" style="background:#ef4444"></div>
+            <span class="preview-col-label">Rejected</span>
+            <span class="preview-col-count">1</span>
+          </div>
+          <div class="preview-card">
+            <div class="pc-company">Amazon</div>
+            <div class="pc-role">SDE Intern</div>
+            <span class="pc-tag intern">Internship</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Toast Notification -->
-  <div class="toast" id="toast"></div>
+  <!-- Stats row -->
+  <div class="stats-row reveal">
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-lbl">Free forever</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">0</div>
+      <div class="stat-lbl">Sign-ups required</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">4</div>
+      <div class="stat-lbl">Status columns</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">∞</div>
+      <div class="stat-lbl">Applications tracked</div>
+    </div>
+  </div>
 
-  <script src="app.js"></script>
+  <!-- Features -->
+  <section class="section" id="features">
+    <p class="section-label reveal">Everything you need</p>
+    <h2 class="section-title reveal">Built for the job hunt grind</h2>
+    <p class="section-sub reveal">
+      Designed specifically for students applying to dozens of roles at once —
+      without the overwhelm.
+    </p>
+
+    <div class="features-grid">
+      <div class="feature-card fc-1 reveal">
+        <div class="feature-icon fi-1">🗂️</div>
+        <div class="feature-title">Kanban Board</div>
+        <div class="feature-desc">Drag and drop cards between Applied, Interviewing, Offer, and Rejected columns — just like a real project board.</div>
+      </div>
+      <div class="feature-card fc-2 reveal">
+        <div class="feature-icon fi-2">⏰</div>
+        <div class="feature-title">Follow-up Reminders</div>
+        <div class="feature-desc">Set a follow-up date on every application. Overdue reminders are highlighted in red so nothing slips through the cracks.</div>
+      </div>
+      <div class="feature-card fc-3 reveal">
+        <div class="feature-icon fi-3">📊</div>
+        <div class="feature-title">Live Stats</div>
+        <div class="feature-desc">See your total applications, response rate, and offer count at a glance — always up to date as you move cards.</div>
+      </div>
+      <div class="feature-card fc-4 reveal">
+        <div class="feature-icon fi-4">🔍</div>
+        <div class="feature-title">Search & Filter</div>
+        <div class="feature-desc">Instantly search by company or role, or filter the board by status. Switch between Kanban and a sortable Table view.</div>
+      </div>
+      <div class="feature-card fc-5 reveal">
+        <div class="feature-icon fi-5">💾</div>
+        <div class="feature-title">Works Offline</div>
+        <div class="feature-desc">All your data is saved in your browser's local storage. No account, no server, no fees. Your data stays on your device.</div>
+      </div>
+      <div class="feature-card fc-6 reveal">
+        <div class="feature-icon fi-6">📥</div>
+        <div class="feature-title">Export Your Data</div>
+        <div class="feature-desc">Download all your applications as a JSON file at any time. Your data is always yours to keep, share, or back up.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-card reveal">
+      <h2>Ready to stay on top of your job hunt?</h2>
+      <p>It takes 10 seconds to add your first application. No sign-up, no credit card.</p>
+      <div class="cta-actions">
+        <a href="app.html" class="btn-primary">
+          Open AppTrack
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>AppTrack — Built with ❤️ using vanilla HTML, CSS & JS · Data stored locally in your browser</p>
+  </footer>
+
+  <script>
+    // Scroll-reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
