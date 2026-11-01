@@ -1,36 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AppTrack &ndash; Internship & Job Application Tracker</title>
-  <meta name="description" content="Track all your internship and job applications in one place. Kanban board with status tracking, stats, and follow-up reminders." />
+  <meta name="description"
+    content="Track all your internship and job applications in one place. Kanban board with status tracking, stats, and follow-up reminders." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css?v=3" />
 </head>
+
 <body>
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
       <div class="logo-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+        </svg>
       </div>
       <span class="logo-text">AppTrack</span>
     </div>
 
     <nav class="sidebar-nav">
       <button class="nav-item active" id="nav-kanban" onclick="switchView('kanban')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>
         <span>Kanban Board</span>
       </button>
       <button class="nav-item" id="nav-table" onclick="switchView('table')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18" />
+        </svg>
         <span>Table View</span>
       </button>
       <button class="nav-item" id="nav-analytics" onclick="switchView('analytics')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+          <path d="M22 12A10 10 0 0 0 12 2v10z" />
+        </svg>
         <span>Analytics</span>
       </button>
     </nav>
@@ -85,28 +107,49 @@
 
     <div class="sidebar-bottom">
       <div class="sidebar-data-actions">
-        <button class="import-btn" onclick="document.getElementById('file-import-input').click()" title="Import JSON or CSV">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <button class="import-btn" onclick="document.getElementById('file-import-input').click()"
+          title="Import JSON or CSV">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
           Import Data
         </button>
         <div class="dropdown-wrapper">
           <button class="import-btn" onclick="toggleExportMenu(event)" id="export-dropdown-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
             Export &#9662;
           </button>
           <div class="dropdown-menu" id="export-dropdown">
             <button class="dropdown-item" onclick="exportData('json')">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+              </svg>
               Export JSON
             </button>
             <button class="dropdown-item" onclick="exportData('csv')">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <line x1="3" y1="9" x2="21" y2="9" />
+                <line x1="3" y1="15" x2="21" y2="15" />
+                <line x1="9" y1="3" x2="9" y2="21" />
+                <line x1="15" y1="3" x2="15" y2="21" />
+              </svg>
               Export CSV (Excel)
             </button>
           </div>
         </div>
       </div>
-      <input type="file" id="file-import-input" accept=".json,.csv" style="display:none;" onchange="handleFileImport(event)" />
+      <input type="file" id="file-import-input" accept=".json,.csv" style="display:none;"
+        onchange="handleFileImport(event)" />
     </div>
   </aside>
 
@@ -117,7 +160,12 @@
     <header class="top-header">
       <div class="header-left">
         <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
         </button>
         <div class="header-title">
           <h1 id="view-title">Kanban Board</h1>
@@ -126,11 +174,19 @@
       </div>
       <div class="header-right">
         <div class="search-box">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
           <input type="text" id="search-input" placeholder="Search company or role..." oninput="handleSearch()" />
         </div>
         <button class="add-btn" id="add-application-btn" onclick="openModal()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
           Add Application
         </button>
       </div>
@@ -146,7 +202,8 @@
       </div>
       <div class="alert-actions">
         <button class="alert-action-btn" onclick="focusFollowUps()">View Follow-ups</button>
-        <button class="alert-dismiss-btn" onclick="dismissAlert()" aria-label="Dismiss banner" title="Dismiss">âœ•</button>
+        <button class="alert-dismiss-btn" onclick="dismissAlert()" aria-label="Dismiss banner"
+          title="Dismiss">âœ•</button>
       </div>
     </div>
 
@@ -154,7 +211,11 @@
     <section class="stats-bar" id="stats-bar">
       <div class="stat-card" id="sc-total">
         <div class="stat-icon total-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+          </svg>
         </div>
         <div class="stat-info">
           <div class="stat-number" id="stat-card-total">0</div>
@@ -164,7 +225,13 @@
       </div>
       <div class="stat-card" id="sc-interview">
         <div class="stat-icon interview-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
         </div>
         <div class="stat-info">
           <div class="stat-number" id="stat-card-interview">0</div>
@@ -173,7 +240,10 @@
       </div>
       <div class="stat-card" id="sc-offer">
         <div class="stat-icon offer-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
         </div>
         <div class="stat-info">
           <div class="stat-number" id="stat-card-offer">0</div>
@@ -182,7 +252,12 @@
       </div>
       <div class="stat-card" id="sc-response">
         <div class="stat-icon response-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
         </div>
         <div class="stat-info">
           <div class="stat-number" id="stat-card-response">0%</div>
@@ -216,7 +291,8 @@
               <span class="col-count" id="count-interview">0</span>
             </div>
           </div>
-          <div class="column-body" id="cards-interview" ondragover="allowDrop(event)" ondrop="dropCard(event,'interview')">
+          <div class="column-body" id="cards-interview" ondragover="allowDrop(event)"
+            ondrop="dropCard(event,'interview')">
             <div class="empty-col-hint" id="empty-interview">Drop cards here</div>
           </div>
           <button class="col-add-btn" onclick="openModal('interview')">+ Add Card</button>
@@ -244,7 +320,8 @@
               <span class="col-count" id="count-rejected">0</span>
             </div>
           </div>
-          <div class="column-body" id="cards-rejected" ondragover="allowDrop(event)" ondrop="dropCard(event,'rejected')">
+          <div class="column-body" id="cards-rejected" ondragover="allowDrop(event)"
+            ondrop="dropCard(event,'rejected')">
             <div class="empty-col-hint" id="empty-rejected">Drop cards here</div>
           </div>
           <button class="col-add-btn" onclick="openModal('rejected')">+ Add Card</button>
@@ -260,7 +337,8 @@
             <tr>
               <th class="sortable" onclick="sortTable('company')">Company <span class="sort-icon">â†•</span></th>
               <th class="sortable" onclick="sortTable('role')">Role <span class="sort-icon">â†•</span></th>
-              <th class="sortable" onclick="sortTable('dateApplied')">Date Applied <span class="sort-icon">â†•</span></th>
+              <th class="sortable" onclick="sortTable('dateApplied')">Date Applied <span class="sort-icon">â†•</span>
+              </th>
               <th>Status</th>
               <th>Type</th>
               <th class="sortable" onclick="sortTable('followUp')">Follow-up <span class="sort-icon">â†•</span></th>
@@ -280,7 +358,7 @@
     <!-- Analytics View -->
     <section class="analytics-view" id="analytics-view" style="display:none;">
       <div class="analytics-container">
-        
+
         <!-- Funnel and Conversion Panel -->
         <div class="analytics-card funnel-card">
           <div class="analytics-card-header">
@@ -361,7 +439,11 @@
       <div class="modal-header">
         <h2 id="modal-title">Add Application</h2>
         <button class="modal-close" onclick="closeModal()" aria-label="Close modal">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
         </button>
       </div>
       <form id="app-form" onsubmit="saveApplication(event)">
@@ -372,7 +454,8 @@
           </div>
           <div class="form-group">
             <label for="field-role">Role / Position *</label>
-            <input type="text" id="field-role" placeholder="e.g. Software Engineer Intern" required autocomplete="off" />
+            <input type="text" id="field-role" placeholder="e.g. Software Engineer Intern" required
+              autocomplete="off" />
           </div>
           <div class="form-group">
             <label for="field-type">Application Type</label>
@@ -415,7 +498,8 @@
           </div>
           <div class="form-group full-width">
             <label for="field-notes">Notes</label>
-            <textarea id="field-notes" rows="3" placeholder="Referral contact, interview rounds, key skills..."></textarea>
+            <textarea id="field-notes" rows="3"
+              placeholder="Referral contact, interview rounds, key skills..."></textarea>
           </div>
         </div>
         <input type="hidden" id="field-id" />
@@ -433,11 +517,22 @@
       <div class="modal-header">
         <h2>Delete Application</h2>
         <button class="modal-close" onclick="closeDeleteModal()" aria-label="Close">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
         </button>
       </div>
       <div class="modal-body">
-        <div class="delete-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></div>
+        <div class="delete-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+            <path d="M10 11v6" />
+            <path d="M14 11v6" />
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+          </svg></div>
         <p>Are you sure you want to delete <strong id="delete-company-name"></strong>?</p>
         <p class="delete-sub">This action cannot be undone.</p>
       </div>
@@ -454,7 +549,11 @@
       <div class="modal-header">
         <h2>Import Applications</h2>
         <button class="modal-close" onclick="closeImportModal()" aria-label="Close">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
         </button>
       </div>
       <div class="modal-body">
@@ -476,4 +575,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>
